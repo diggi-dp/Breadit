@@ -6,12 +6,13 @@ export async function GET(req: Request) {
     const url = new URL(req.url)
 
     const session = await getauthSession()
+
     let followedCommunitiesIds: string[] = []
 
     if (session) {
         const followedCommunities = await db.subscription.findMany({
             where: {
-                userId: session?.user.id
+                userId: session?.user?.id,
             },
             include: {
                 subreddit: true
