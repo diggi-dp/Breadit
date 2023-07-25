@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     if (session) {
         const followedCommunities = await db.subscription.findMany({
             where: {
-                userId: session.user.id
+                userId: session?.user.id
             },
             include: {
                 subreddit: true
