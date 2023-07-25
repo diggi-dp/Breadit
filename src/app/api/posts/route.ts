@@ -1,19 +1,19 @@
 import { getauthSession } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { Session } from "@prisma/client"
 import { z } from "zod"
 
 export async function GET(req: Request) {
     const url = new URL(req.url)
 
-    const session = await getauthSession()
+    const session  = await getauthSession()
 
     let followedCommunitiesIds: string[] = []
 
     if (session) {
         const followedCommunities = await db.subscription.findMany({
             where: {
-                // @ts-expect-error
-                userId: session?.user?.id
+                userId: session.user.id
             },
             include: {
                 subreddit: true

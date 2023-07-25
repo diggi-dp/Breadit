@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
             }
             return session
         },
-
         async jwt({ token, user }) {
             const dbUser = await db.user.findFirst({
                 where: {
@@ -60,12 +59,27 @@ export const authOptions: NextAuthOptions = {
                 picture: dbUser.image,
                 username: dbUser.username
             }
-        },
+        }   ,
         redirect() {
             return '/'
         }
     }
 }
 
+// token {
+//     id: 'clk9lbjjx0000v7vkcw6hxmsx',
+//     name: 'Bhavesh Jasani',
+//     email: 'cnctest51@gmail.com',
+//     picture: 'https://lh3.googleusercontent.com/a/AAcHTtdp624Z0VtSbmh1d6PmxNsuqnb1yupgja37p76KgJR-=s96-c',
+//     username: 'test_username'
+//   }
+//   session {
+//     user: {
+//       name: 'Bhavesh Jasani',
+//       email: 'cnctest51@gmail.com',
+//       image: 'https://lh3.googleusercontent.com/a/AAcHTtdp624Z0VtSbmh1d6PmxNsuqnb1yupgja37p76KgJR-=s96-c'
+//     },
+//     expires: '2023-08-24T10:32:06.478Z'
+//   }
 
 export const getauthSession = () => getServerSession(authOptions)
