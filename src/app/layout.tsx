@@ -21,7 +21,7 @@ export default function RootLayout({ children, authModal }: { children: React.Re
       <body className='min-h-100 pt-12 bg-slate antialiased'>
         <Providers>
 
-          {/* @ts-expect-error server component */}
+          {/* @ts-expect-error server */}
           <Navbar />
 
           {authModal}
