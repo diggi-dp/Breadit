@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { User } from "lucide-react"
 import debounce from "lodash.debounce"
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
+import Link from "next/link"
 
 
 
@@ -84,7 +85,7 @@ const SearchBar = () => {
                                                     value={subreddit.name}
                                                 >
                                                     <User className="mr-2 h-4 w-4" />
-                                                    <a href={`/r/${subreddit.name}`}>r/{subreddit.name}</a>
+                                                    <Link href={`/r/${subreddit.name}`}>r/{subreddit.name}</Link>
                                                 </CommandItem>
                                             )
                                         })
