@@ -1,0 +1,1 @@
+export const INFINITE_SCROLL_RESULT = 4
