@@ -7,12 +7,10 @@ import { PostCreationRequest, PostValidator } from "@/lib/validators/post"
 import { zodResolver } from '@hookform/resolvers/zod'
 import EditorJS from "@editorjs/editorjs"
 import { uploadFiles } from "@/lib/uploadthing"
-import { title } from "process"
 import { toast } from "@/hooks/use-toast"
 import { useMutation } from "@tanstack/react-query"
 import axios from "axios"
 import { usePathname, useRouter } from "next/navigation"
-import { useCustomToast } from "@/hooks/use-custom-toast"
 
 interface EditorProps {
     subredditId: string
@@ -25,7 +23,6 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
     const _titleRef = useRef<HTMLTextAreaElement>(null)
     const pathname = usePathname()
     const router = useRouter()
-    const { loginToast } = useCustomToast()
 
 
     const { register, handleSubmit, formState: { errors } } = useForm<PostCreationRequest>({
@@ -147,9 +144,6 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
             return data
         },
         onError: (err) => {
-            if (err.response?.status === 401) {
-                return loginToast()
-            }
             return toast({
                 title: 'Something went wrong.',
                 description: 'Your post was not published, please try again later.',

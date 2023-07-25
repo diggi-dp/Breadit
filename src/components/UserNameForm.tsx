@@ -13,12 +13,16 @@ import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { toast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
+import { z } from "zod"
+import { cn } from "@/lib/utils"
 
-interface UserNameFormProps {
+interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
     user: Pick<User, 'id' | 'username'>
 }
 
-const UserNameForm: FC<UserNameFormProps> = ({ user, className }) => {
+type FormData = z.infer<typeof UsernameValidator>
+
+const UserNameForm = ({ user, className, ...props }: UserNameFormProps) => {
 
     const router = useRouter()
 
@@ -61,7 +65,10 @@ const UserNameForm: FC<UserNameFormProps> = ({ user, className }) => {
     })
 
     return (
-        <form onSubmit={handleSubmit((e) => updateUsername(e))}>
+        <form className={cn(className)}
+            onSubmit={handleSubmit((e) => updateUsername(e))}
+            {...props}
+        >
             <Card>
                 <CardHeader>
                     <CardTitle> Your username</CardTitle>

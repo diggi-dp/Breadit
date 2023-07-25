@@ -30,7 +30,7 @@ interface PostCommentsProps {
 
 const PostComments: FC<PostCommentsProps> = ({ comment, votesAmt, currentVote, postId }) => {
 
-    const commentRef = useRef()
+    const commentRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
     const { data: session } = useSession()
     const [isReplying, setIsReplying] = useState<boolean>(false)
