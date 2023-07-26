@@ -3,7 +3,7 @@
 import { useCustomToast } from "@/hooks/use-custom-toast"
 import { usePrevious } from "@mantine/hooks"
 import { VoteType } from "@prisma/client"
-import { FC, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import { Button } from "../ui/Button"
 import { ArrowBigDown, ArrowBigUp } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -11,6 +11,9 @@ import { useMutation } from "@tanstack/react-query"
 import { PostVoteRequest } from "@/lib/validators/vote"
 import axios, { AxiosError } from "axios"
 import { toast } from "@/hooks/use-toast"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import debounce from "lodash.debounce"
 
 interface PostVoteClientProps {
     postId: string
@@ -20,6 +23,8 @@ interface PostVoteClientProps {
 
 const PostVoteClient: FC<PostVoteClientProps> = ({ postId, initialVoteAmount, initialVote }) => {
 
+    const session = useSession()
+    const router = useRouter()
     const { loginToast } = useCustomToast()
     const [voteAmt, setVoteAmt] = useState<number>(initialVoteAmount)
     const [currentVote, setCurrentVote] = useState(initialVote)
@@ -31,15 +36,16 @@ const PostVoteClient: FC<PostVoteClientProps> = ({ postId, initialVoteAmount, in
 
 
     const { mutate: vote } = useMutation({
-        mutationFn: async (voteType: VoteType) => {
+        mutationFn: async (type: VoteType) => {
             const payload: PostVoteRequest = {
                 postId,
-                voteType,
+                voteType: type,
             }
 
             await axios.patch('/api/subreddit/post/vote', payload)
         },
         onError: (err, VoteType) => {
+            console.log({ VoteType, voteAmt })
             if (VoteType === 'UP') {
                 setVoteAmt(pre => pre - 1)
             } else {
@@ -62,6 +68,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({ postId, initialVoteAmount, in
         },
         onMutate: (type: VoteType) => {
             if (currentVote === type) {
+                console.log({ type, voteAmt })
                 setCurrentVote(undefined)
                 if (type === 'UP') {
                     setVoteAmt(pre => pre - 1)
@@ -70,6 +77,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({ postId, initialVoteAmount, in
                 }
             } else {
                 setCurrentVote(type)
+                console.log({ type, voteAmt })
                 if (type === 'UP') {
                     setVoteAmt(pre => pre + (currentVote ? 2 : 1))
                 } else if (type === 'DOWN') {
@@ -80,9 +88,27 @@ const PostVoteClient: FC<PostVoteClientProps> = ({ postId, initialVoteAmount, in
     })
 
 
+    //debounce voting
+    const request = debounce((str) => {
+        vote(str)
+    }, 300)
+
+    const debounceVote = useCallback((str: string) => {
+        request(str)
+    }, [])
+
+    //vote handler
+    const VoteHandler = (str: string) => {
+        if (!session.data) {
+            return router.push('/sign-in')
+        }
+        debounceVote(str)
+    }
+
+
     return (
         <div className="flex sm:flex-col gap-4 sm:gap-0 pr-6 sm:w-20 pb-4 sm:pb-0">
-            <Button onClick={() => vote('UP')} size='sm' variant='ghost' aria-label="upvote" >
+            <Button onClick={() => VoteHandler('UP')} size='sm' variant='ghost' aria-label="upvote" >
                 <ArrowBigUp className={cn('h-5 w-5 text-zinc-700', {
                     'text-emerald-500 fill-emerald-500': currentVote === 'UP'
                 })} />
@@ -90,7 +116,7 @@ const PostVoteClient: FC<PostVoteClientProps> = ({ postId, initialVoteAmount, in
 
             <p className="text-center py-2 font-medium text-sm text-zinc-900">{voteAmt}</p>
 
-            <Button onClick={() => vote('DOWN')} size='sm' variant='ghost' aria-label="downvote" >
+            <Button onClick={() => VoteHandler('DOWN')} size='sm' variant='ghost' aria-label="downvote" >
                 <ArrowBigDown className={cn('h-5 w-5 text-zinc-700', {
                     'text-red-500 fill-red-500': currentVote === 'DOWN'
                 })} />
