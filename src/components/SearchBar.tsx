@@ -1,5 +1,5 @@
 "use client"
-import { FC, useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "./ui/Command"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
@@ -19,9 +19,9 @@ const SearchBar = () => {
     const searchbarRef = useRef(null)
     const pathname = usePathname()
 
-    useEffect(()=>{
+    useEffect(() => {
         setInput('')
-    },[pathname])
+    }, [pathname])
 
 
     const { data: queryResults, refetch, isFetched, isFetching } = useQuery({
@@ -53,8 +53,22 @@ const SearchBar = () => {
     })
 
 
+    const currentCommunity = () => {
+        const splitPath = pathname.split('/')
+        if (splitPath[1] === 'r' && splitPath[2] !== 'create') {
+            return (
+                <div className="flex flex-row justify-center items-center rounded-3xl px-2 py-1 border bg-neutral-300 ">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>r/{splitPath[2]}</span>
+                </div>
+            )
+        }
+    }
+
+
     return (
         <Command ref={searchbarRef} className="relative rounded-lg border max-w-lg z-50 overflow-visible">
+
             <CommandInput
                 value={input}
                 onValueChange={(text) => {
@@ -63,7 +77,10 @@ const SearchBar = () => {
                 }}
                 className="outline-none border-none focus:border-none focus:outline-none ring-0"
                 placeholder="Search communities..."
-            />
+            >
+                {currentCommunity()}
+            </CommandInput>
+
 
             {
                 input.length > 0 ? (
