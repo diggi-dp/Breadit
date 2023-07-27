@@ -20,7 +20,7 @@ const Page = () => {
     const { mutate: createCommunity, isLoading } = useMutation({
         mutationFn: async () => {
             const payload: CreateSubredditPayload = {
-                name: input
+                name: input.trim()
             }
             const { data } = await axios.post('/api/subreddit', payload)
             return data as string
@@ -62,6 +62,18 @@ const Page = () => {
         }
     })
 
+    const handleCreate = () => {
+        if (input.indexOf(' ') !== -1) {
+            return toast({
+                title: 'Community name is not valid.',
+                description: 'Please ensure there is no empty space.',
+                variant: 'destructive'
+            })
+        }
+        createCommunity()
+    }
+
+
     return (
         <div className="container flex items-center h-full max-w-3xl mx-auto">
             <div className="relative bg-white w-full h-fit p-4 rounded-lg space-y-6">
@@ -89,7 +101,7 @@ const Page = () => {
                     <Button variant='subtle' onClick={() => router.back()}>
                         cancel
                     </Button>
-                    <Button isLoading={isLoading} disabled={input.length === 0} onClick={() => createCommunity()}>
+                    <Button isLoading={isLoading} disabled={input.length === 0} onClick={() => handleCreate()}>
                         Create Community
                     </Button>
                 </div>
