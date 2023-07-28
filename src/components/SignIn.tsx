@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Icons } from "./Icons"
 import UserAuthForm from "./UserAuthForm"
+import { LoginForm } from "./LoginForm"
 
 
 const SignIn = () => {
@@ -14,6 +15,7 @@ const SignIn = () => {
                 </p>
 
                 {/* sign in form  */}
+                <LoginForm/>
                 <UserAuthForm />
 
                 <p className="px-8 text-center text-sm text-zinc-700 ">

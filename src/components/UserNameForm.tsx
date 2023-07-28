@@ -3,7 +3,6 @@
 import { UsernameRequest, UsernameValidator } from "@/lib/validators/username"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { User } from "@prisma/client"
-import { FC } from "react"
 import { useForm } from "react-hook-form"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/Card"
 import { Label } from "./ui/Label"

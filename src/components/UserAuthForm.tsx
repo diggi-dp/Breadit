@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import { signIn } from 'next-auth/react'
 import { Icons } from './Icons'
 import { useToast } from '@/hooks/use-toast'
-import { error } from 'console'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 

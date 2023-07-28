@@ -2,7 +2,9 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { db } from "./db";
 import GoogleProvider from 'next-auth/providers/google'
+import CredentialsProvider from "next-auth/providers/credentials";
 import { nanoid } from 'nanoid'
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(db),
@@ -16,6 +18,50 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        }),
+        CredentialsProvider({
+            name: "Sign in",
+            credentials: {
+                email: {
+                    label: "Email",
+                    type: "email",
+                    placeholder: "example@example.com",
+                },
+                password: { label: "Password", type: "password" },
+            },
+            async authorize(credentials: any,) {
+
+                const { email, password } = credentials
+
+                if (!email || !password) {
+                    return null;
+                }
+                const user = await db.user.findFirst({
+                    where: {
+                        email
+                    }
+                })
+
+                if (!user) {
+                    throw new Error('Invalid credentials');
+                }
+
+                const passwordMatch = user.password ? await bcrypt.compare(password, user.password) : false
+
+                if (!passwordMatch) {
+                    throw new Error('Invalid credentials');
+                }
+
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    picture: user?.image || null,
+                    username: user?.username || ''
+                    // Add other user properties as needed
+                };
+
+            },
         })
     ],
     callbacks: {
