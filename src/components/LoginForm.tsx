@@ -34,8 +34,7 @@ export const LoginForm = () => {
 
             setLoading(false);
             if (res?.url) {
-                console.log(res.url)
-                router.replace('/')
+                router.replace(res.url)
                 router.refresh()
             }
 
