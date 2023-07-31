@@ -9,9 +9,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
 
 
+
 export const LoginForm = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+
 
 
     const loginUser = async (data: { email: string; password: string }) => {
@@ -22,21 +24,27 @@ export const LoginForm = () => {
                 email: data.email,
                 password: data.password,
             });
-
-            setLoading(false);
+            console.log('res', res)
             if (res?.error) {
-                return toast({
+                toast({
                     title: res.error,
-                    description: 'Please provide right credentials.',
+                    description: 'please provide valid credentials.',
                     variant: 'destructive'
                 })
             }
 
-            return router.replace(res?.url as string)
+            if (res?.url) {
+                router.replace(res.url)
+                router.refresh()
+            }
 
         } catch (error) {
             setLoading(false);
-            console.log(error)
+            toast({
+                title: 'There was a problem',
+                description: 'There is an error logging In.',
+                variant: 'destructive'
+            })
         }
     }
 
