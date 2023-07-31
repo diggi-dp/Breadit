@@ -35,8 +35,8 @@ export const LoginForm = () => {
 
             setLoading(false);
             if (res?.url) {
-                router.replace(res.url)
-                router.refresh()
+                await router.replace('/')
+                await router.refresh()
             }
 
         } catch (error) {
