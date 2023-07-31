@@ -22,16 +22,15 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             name: "Sign in",
             credentials: {
-                email: {
-                    label: "Email",
-                    type: "email",
-                    placeholder: "example@example.com",
-                },
+                email: { label: "Email", type: "email", placeholder: "example@example.com" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials: any,) {
+            async authorize(credentials) {
 
-                const { email, password } = credentials
+                const { email, password } = credentials as {
+                    email: string;
+                    password: string;
+                }
 
                 if (!email || !password) {
                     return null;
@@ -106,8 +105,8 @@ export const authOptions: NextAuthOptions = {
                 username: dbUser.username
             }
         },
-        redirect() {
-            return '/'
+        redirect({url,baseUrl}) {
+            return `${baseUrl}/`
         }
     }
 }

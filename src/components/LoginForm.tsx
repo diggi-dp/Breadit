@@ -8,30 +8,33 @@ import { Input } from "./ui/Input";
 import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
 
-// type FormData = {
-//     email: string
-//     password: string
-// }
 
 export const LoginForm = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
-    const callbackUrl = '/'
 
     const loginUser = async (data: { email: string; password: string }) => {
         try {
             setLoading(true);
             const res = await signIn("credentials", {
-                redirect: true,
+                redirect: false,
                 email: data.email,
                 password: data.password,
-                callbackUrl,
             });
-            console.log('res', res)
+           
+            if (res?.error) {
+                setLoading(false);
+                return toast({
+                    title: res.error,
+                    description: 'Please provide right credentials.',
+                    variant: 'destructive'
+                })
+            }
+
+            return router.replace(res?.url as string)
 
         } catch (error) {
-            console.log(error)
             setLoading(false);
             toast({
                 title: 'There was a problem',
@@ -39,7 +42,7 @@ export const LoginForm = () => {
                 variant: 'destructive'
             })
         } finally {
-            setLoading(false)
+            setLoading(false)   
         }
     }
 

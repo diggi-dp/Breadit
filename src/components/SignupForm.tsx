@@ -13,12 +13,13 @@ import { toast } from "@/hooks/use-toast";
 
 type FormData = z.infer<typeof SignupFormValidator>
 
+
 export const SignupForm = () => {
 
     const { mutate, isLoading } = useMutation({
         mutationFn: async (form: FormData) => {
             const payload = form
-            const {data} = await axios.post('/api/register', payload)
+            const { data } = await axios.post('/api/register', payload)
             console.log(data)
             return data
         },
@@ -40,9 +41,10 @@ export const SignupForm = () => {
             })
         },
         onSuccess: (variables) => {
-            // signIn({ variable.email, data.password })
-            console.log('variables',variables.email)
-            console.log('variables',variables.password)
+            signIn('credentials', {
+                email: variables.email,
+                password: variables.password
+            })
         }
     })
 
@@ -111,7 +113,7 @@ export const SignupForm = () => {
                 type="submit"
                 isLoading={isLoading}
             >
-                Sign In
+                Sign Up
             </Button>
         </form >
     );
