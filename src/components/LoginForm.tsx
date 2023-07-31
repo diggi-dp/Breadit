@@ -24,15 +24,16 @@ export const LoginForm = () => {
                 email: data.email,
                 password: data.password,
             });
-            console.log('res', res)
             if (res?.error) {
-                toast({
+                setLoading(false);
+                return toast({
                     title: res.error,
                     description: 'please provide valid credentials.',
                     variant: 'destructive'
                 })
             }
 
+            setLoading(false);
             if (res?.url) {
                 router.replace(res.url)
                 router.refresh()
