@@ -18,7 +18,7 @@ export const LoginForm = () => {
         try {
             setLoading(true);
             const res = await signIn("credentials", {
-                redirect: false,
+                redirect: true,
                 email: data.email,
                 password: data.password,
             });
@@ -42,7 +42,7 @@ export const LoginForm = () => {
                 variant: 'destructive'
             })
         } finally {
-            setLoading(false)   
+            setLoading(false)
         }
     }
 
