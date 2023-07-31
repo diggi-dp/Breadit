@@ -18,13 +18,13 @@ export const LoginForm = () => {
         try {
             setLoading(true);
             const res = await signIn("credentials", {
-                redirect: true,
+                redirect: false,
                 email: data.email,
                 password: data.password,
             });
-           
+
+            setLoading(false);
             if (res?.error) {
-                setLoading(false);
                 return toast({
                     title: res.error,
                     description: 'Please provide right credentials.',
@@ -36,13 +36,7 @@ export const LoginForm = () => {
 
         } catch (error) {
             setLoading(false);
-            toast({
-                title: 'There was a problem',
-                description: 'There is an error logging In.',
-                variant: 'destructive'
-            })
-        } finally {
-            setLoading(false)
+            console.log(error)
         }
     }
 
