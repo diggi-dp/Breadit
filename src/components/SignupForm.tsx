@@ -41,6 +41,7 @@ export const SignupForm = () => {
             })
         },
         onSuccess: (variables) => {
+            reset()
             signIn('credentials', {
                 email: variables.email,
                 password: variables.password
@@ -49,7 +50,7 @@ export const SignupForm = () => {
     })
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm<SignupFormRequest>({
+    const { register,reset, handleSubmit, formState: { errors } } = useForm<SignupFormRequest>({
         resolver: zodResolver(SignupFormValidator),
         defaultValues: {
             name: '',

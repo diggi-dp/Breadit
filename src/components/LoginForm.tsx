@@ -1,7 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";   
 import { useState } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
@@ -11,7 +10,6 @@ import { toast } from "@/hooks/use-toast";
 
 
 export const LoginForm = () => {
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
 
 
@@ -23,6 +21,7 @@ export const LoginForm = () => {
                 email: data.email,
                 password: data.password,
             });
+
             if (res?.error) {
                 setLoading(false);
                 return toast({
@@ -32,13 +31,15 @@ export const LoginForm = () => {
                 })
             }
 
+            reset()
             setLoading(false);
+            
             if (res?.url) {
-                router.replace(res.url)
-                router.refresh()
+                window.location.replace('/')
             }
 
         } catch (error) {
+            reset()
             setLoading(false);
             toast({
                 title: 'There was a problem',
@@ -49,7 +50,7 @@ export const LoginForm = () => {
     }
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register,reset, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             email: '',
             password: ''

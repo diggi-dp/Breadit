@@ -17,7 +17,7 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
     const loginWithGoogle = async () => {
         setLoading(true)
         try {
-            await signIn('google')
+            await signIn('google',{callbackUrl:'/'})
         } catch (error) {
             // tost notification 
             toast({
