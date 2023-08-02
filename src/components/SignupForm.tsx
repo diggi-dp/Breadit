@@ -20,7 +20,6 @@ export const SignupForm = () => {
         mutationFn: async (form: FormData) => {
             const payload = form
             const { data } = await axios.post('/api/register', payload)
-            console.log(data)
             return data
         },
         onError: (err) => {
@@ -40,17 +39,17 @@ export const SignupForm = () => {
                 variant: 'destructive',
             })
         },
-        onSuccess: (variables) => {
+        onSuccess: (data) => {
             reset()
-            signIn('credentials', {
-                email: variables.email,
-                password: variables.password
+            return toast({
+                title: 'Varify Email',
+                description: data.msg,
             })
         }
     })
 
 
-    const { register,reset, handleSubmit, formState: { errors } } = useForm<SignupFormRequest>({
+    const { register, reset, handleSubmit, formState: { errors } } = useForm<SignupFormRequest>({
         resolver: zodResolver(SignupFormValidator),
         defaultValues: {
             name: '',
