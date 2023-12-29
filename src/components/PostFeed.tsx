@@ -62,7 +62,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
 
                     const currentVote = post.votes?.find(vote => vote.userId === session?.user.id)
 
-                    if (idx === posts.length - 1) {
+                    if (idx === posts.length - 2) {
                         return (
                             <li key={post.id} ref={ref}>
                                 <Post

@@ -11,20 +11,21 @@ const formatDistanceLocale = {
   lessThanXSeconds: 'just now',
   xSeconds: 'just now',
   halfAMinute: 'just now',
-  lessThanXMinutes: '{{count}}m',
-  xMinutes: '{{count}}m',
-  aboutXHours: '{{count}}h',
-  xHours: '{{count}}h',
-  xDays: '{{count}}d',
-  aboutXWeeks: '{{count}}w',
-  xWeeks: '{{count}}w',
-  aboutXMonths: '{{count}}m',
-  xMonths: '{{count}}m',
-  aboutXYears: '{{count}}y',
-  xYears: '{{count}}y',
-  overXYears: '{{count}}y',
-  almostXYears: '{{count}}y',
-}
+  lessThanXMinutes: '{{count}} minute',
+  xMinutes: '{{count}} minute',
+  aboutXHours: '{{count}} hour',
+  xHours: '{{count}} hour',
+  xDays: '{{count}} day',
+  aboutXWeeks: '{{count}} week',
+  xWeeks: '{{count}} week',
+  aboutXMonths: '{{count}} month',
+  xMonths: '{{count}} month',
+  aboutXYears: '{{count}} year',
+  xYears: '{{count}} year',
+  overXYears: '{{count}} year',
+  almostXYears: '{{count}} year',
+};
+
 
 function formatDistance(token: string, count: number, options?: any): string {
   options = options || {}
