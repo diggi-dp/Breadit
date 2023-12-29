@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { Prisma, Subreddit } from "@prisma/client"
 import { usePathname, useRouter } from "next/navigation"
-import { User } from "lucide-react"
+import { User, XCircle } from "lucide-react"
 import debounce from "lodash.debounce"
 import { useOnClickOutside } from "@/hooks/use-on-click-outside"
 import Link from "next/link"
@@ -57,9 +57,14 @@ const SearchBar = () => {
         const splitPath = pathname.split('/')
         if (splitPath[1] === 'r' && splitPath[2] !== 'create') {
             return (
-                <div className="flex flex-row justify-center items-center rounded-3xl px-2 py-1 border bg-neutral-300 ">
+                <div className="flex flex-row justify-center items-center rounded-3xl px-2 py-1 border bg-neutral-300 cursor-pointer ">
                     <User className="mr-2 h-4 w-4" />
-                    <span>r/{splitPath[2]}</span>
+                    <span className="text-sm font-semibold ">r/{splitPath[2]}</span>
+                    <span className=" flex justify-center items-center mr-0 ml-1">
+                        <XCircle
+                            onClick={()=>router.push('/')}
+                            className=" h-5 w-5 rounded-[100px] shadow-[0_0_0_0_#fff] hover:shadow-[0_0_0_5px_#fff] transition-all" />
+                    </span>
                 </div>
             )
         }

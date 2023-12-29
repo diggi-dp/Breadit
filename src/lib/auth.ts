@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
         CredentialsProvider({
-            name: "Sign in",
+            name: "Credentials",
             credentials: {
                 email: {
                     label: "Email",
@@ -106,9 +106,9 @@ export const authOptions: NextAuthOptions = {
                 username: dbUser.username
             }
         },
-        redirect() {
-            return '/'
-        }
+        // redirect({baseUrl}) {     // given callbackUrl google and credentials
+        //     return '/'
+        // }
     }
 }
 

@@ -24,7 +24,7 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
         threshold: 1
     })
 
-    const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    const { data, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery(
         ['infinite-query'],
         async ({ pageParam = 1 }) => {
             const query =
@@ -34,15 +34,20 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
             return data as ExtendedPost[]
         },
         {
-            getNextPageParam: (_, pages) => {
+            getNextPageParam: (data, pages) => {
+                if (data.length === 0) {
+                    return undefined
+                }
                 return pages.length + 1
             },
             initialData: { pages: [initialPosts], pageParams: [1] }
         }
     )
 
+
+
     useEffect(() => {
-        if (entry?.isIntersecting) {
+        if (entry?.isIntersecting && hasNextPage) {
             fetchNextPage()
         }
     }, [entry, fetchNextPage])
@@ -72,6 +77,12 @@ const PostFeed: FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
                                     votesAmt={totalVotes}
                                     currentVote={currentVote}
                                 />
+                                {
+                                    isFetchingNextPage && <div
+                                        className="border-4 border-solid border-x-stone-900 border-opacity-21 
+                                            border-b-0  rounded-full w-12 h-12 animate-spin m-auto mt-6 ">
+                                    </div>
+                                }
                             </li>
                         )
                     } else {

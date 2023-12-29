@@ -1,50 +1,56 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";   
 import { useState } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
 
-// type FormData = {
-//     email: string
-//     password: string
-// }
+
 
 export const LoginForm = () => {
-    const router = useRouter();
     const [loading, setLoading] = useState(false);
 
-    const callbackUrl = '/'
 
     const loginUser = async (data: { email: string; password: string }) => {
         try {
             setLoading(true);
             const res = await signIn("credentials", {
-                redirect: true,
+                redirect: false,
                 email: data.email,
                 password: data.password,
-                callbackUrl,
             });
-            console.log('res', res)
+
+            if (res?.error) {
+                setLoading(false);
+                return toast({
+                    title: res.error,
+                    description: 'please provide valid credentials.',
+                    variant: 'destructive'
+                })
+            }
+
+            reset()
+            setLoading(false);
+            
+            if (res?.url) {
+                window.location.replace('/')
+            }
 
         } catch (error) {
-            console.log(error)
+            reset()
             setLoading(false);
             toast({
                 title: 'There was a problem',
                 description: 'There is an error logging In.',
                 variant: 'destructive'
             })
-        } finally {
-            setLoading(false)
         }
     }
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register,reset, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             email: '',
             password: ''
