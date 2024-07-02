@@ -8,7 +8,6 @@ import { formatTimeToNow } from "@/lib/utils"
 import { CachedPost } from "@/types/redis"
 import { Post, User, Vote } from "@prisma/client"
 import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react"
-import { GetServerSideProps } from "next"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
@@ -99,12 +98,5 @@ function PostVoteShell() {
         </div>
     )
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    return {
-      props: {},
-      timeout: 30,
-    };
-  };
 
 export default page
